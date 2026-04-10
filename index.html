@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hangman Game 🎮</title>
+
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: Arial;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 60px;
+        }
+
+        .logo {
+            font-family: monospace;
+            font-size: 30px;
+            letter-spacing: 6px;
+            margin-bottom: 10px;
+        }
+
+        .dots {
+            font-family: monospace;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            font-size: 18px;
+            margin: 20px auto;
+        }
+
+        .word {
+            font-size: 30px;
+            letter-spacing: 10px;
+            margin: 20px;
+        }
+
+        .lives {
+            font-size: 20px;
+            margin: 10px;
+        }
+
+        .hint {
+            font-size: 18px;
+            margin: 10px;
+            color: #00ffcc;
+        }
+
+        .guessed {
+            margin: 10px;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            width: 60px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .win {
+            color: #00ff00;
+        }
+
+        .lose {
+            color: #ff4c4c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="logo">H A N G M A N</div>
+        <div class="dots">- - - - - - -</div>
+
+        <pre>{{ stage }}</pre>
+
+        <div class="word">{{ display }}</div>
+        <div class="lives">Lives: {{ lives }}</div>
+        <div class="hint">Hint: {{ hint }}</div>
+        <div class="guessed">Guessed: {{ guessed }}</div>
+
+        {% if not game_over %}
+        <form method="POST" id="gameForm">
+            <input type="text" name="guess" id="guessInput" maxlength="1" autofocus required>
+            <button type="submit">Guess</button>
+        </form>
+        {% endif %}
+
+        {% if game_over %}
+            <div class="result">
+                {% if "_" not in display %}
+                    <span class="win"> You Win!</span>
+                {% else %}
+                    <span class="lose">Game Over! The word was "{{ word }}"</span>
+                {% endif %}
+            </div>
+
+            <form method="GET">
+                <button type="submit">🔄 Restart Game</button>
+            </form>
+        {% endif %}
+
+    </div>
+
+    <script>
+        const input = document.getElementById("guessInput");
+        if (input) {
+            input.focus();
+
+            input.addEventListener("input", function () {
+                if (this.value.length === 1) {
+                    document.getElementById("gameForm").submit();
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
